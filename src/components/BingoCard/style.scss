@@ -1,0 +1,22 @@
+.bingo-card {
+  background-color: #f0f8ff;
+  border-radius: 5px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  margin: 10px auto;
+  .bingo-number {
+    background-color: #696969;
+    color: #ececec;
+    font-style: italic;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
+    margin: 3px;
+    &--marked {
+      background-color: #a52a2a;
+    }
+  }
+}
