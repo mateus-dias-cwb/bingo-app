@@ -4,11 +4,11 @@ export default class BingoCard extends HTMLElement {
   constructor() {
     super()
 
-    this.cardNumbers = []
+    const storedCardNumbers = JSON.parse(window.localStorage.getItem("bingoNumbers"))
+    this.cardNumbers = storedCardNumbers ? storedCardNumbers : []
     const card = this.createBingoCard()
     this.bingoCardSetUp(card, 25)
 
-    // console.log(styles)
     const style = document.createElement("style")
     style.innerHTML = styles
 
@@ -23,33 +23,54 @@ export default class BingoCard extends HTMLElement {
     return card
   }
 
-  createBingoNumber() {
+  createBingoNumber(num=null, i=null) {
     const number = document.createElement("div")
     number.classList.add("bingo-number")
-    number.innerHTML = ('0' + this.generateNewNumber()).slice(-2)
+    number.setAttribute("id", i)
+    if (num) {
+      number.innerHTML = ('0' + num.number).slice(-2)
+      if (num.marked) {
+        number.classList.add("marked")
+      } else {
+        number.classList.remove("marked")
+      }
+    } else {
+      number.innerHTML = ('0' + this.generateNewNumber()).slice(-2)
+    }
     number.addEventListener("click", evt => {
-      console.log(evt)
       number.classList.toggle("marked")
+      const bingoNumbers = JSON.parse(window.localStorage.getItem("bingoNumbers"))
+      const num = bingoNumbers[number.getAttribute("id")]
+      num.marked = !num.marked
+      window.localStorage.setItem("bingoNumbers", JSON.stringify(bingoNumbers))
     })
     return number
   }
 
   generateNewNumber(min = 0, max = 101) {
     let newNumber = Math.floor(Math.random() * (max - min) + min)
-    let newNumberIndex = this.cardNumbers.indexOf(newNumber)
+    let newNumberIndex = this.cardNumbers.findIndex(item => {
+      if (item.number === newNumber)
+        return true
+    })
     while (newNumberIndex != -1) {
       newNumber = Math.floor(Math.random() * (max - min) + min)
-      newNumberIndex = this.cardNumbers.indexOf(newNumber)
+      newNumberIndex = this.cardNumbers.findIndex(item => {
+        if (item.number === newNumber)
+          return true
+      })
     }
-    this.cardNumbers.push(newNumber)
+    this.cardNumbers.push({number:newNumber,marked:false})
     return newNumber
   }
 
   bingoCardSetUp(card, cardSize) {
     for(let i = 0; i < cardSize; i++) {
-      const number = this.createBingoNumber()
+      const number = this.createBingoNumber(this.cardNumbers[i], i)
       card.append(number)
     }
+    
+    window.localStorage.setItem("bingoNumbers", JSON.stringify(this.cardNumbers))
   }
 }
 customElements.define("bingo-card", BingoCard)
