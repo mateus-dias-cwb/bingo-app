@@ -10,7 +10,23 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.styles.scss$/,
+        exclude: /node_modules/,
+        use: [
+          "sass-to-string",
+          {
+            loader: "sass-loader",
+            options: {
+              sassOptions: {
+                outputStyle: "compressed",
+              },
+            },
+          },
+        ],
+      },
+      {
         test: /\.s[ac]ss$/i,
+        exclude: [/\.styles.scss$/, /node_modules/],
         use: ["style-loader", "css-loader", "sass-loader"],
       },
       {

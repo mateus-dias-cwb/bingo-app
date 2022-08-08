@@ -1,0 +1,38 @@
+.bingo-card {
+  background-color: #f0f8ff;
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  padding: 15px;
+  margin: 0 auto;
+  width: 350px;
+  height: 350px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  .bingo-number {
+    $default: #696969;
+    $marked: #c22222;
+
+    background-color: $default;
+    color: #ececec;
+    font-size: 1.3rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 8px;
+    cursor: pointer;
+    transition: ease .3s;
+    &:hover {
+      background-color: lighten($default, 10%);
+    }
+    &.marked {
+      background-color: $marked;
+      &:hover {
+        background-color: lighten($marked, 10%);
+      }
+    }
+  }
+}
