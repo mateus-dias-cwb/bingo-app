@@ -1,5 +1,5 @@
 .bingo-card {
-  background-color: #f0f8ff;
+  background-color: var(--bg-color);
   border-radius: 10px;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -12,11 +12,8 @@
   top: 50%;
   transform: translate(-50%, -50%);
   .bingo-number {
-    $default: #696969;
-    $marked: #c22222;
-
-    background-color: $default;
-    color: #ececec;
+    background-color: var(--default-number-bg);
+    color: var(--default-number-color);
     font-size: 1.3rem;
     border-radius: 50%;
     display: flex;
@@ -26,12 +23,12 @@
     cursor: pointer;
     transition: ease .3s;
     &:hover {
-      background-color: lighten($default, 10%);
+      background-color: var(--default-number-bg-hover);
     }
     &.marked {
-      background-color: $marked;
+      background-color: var(--marked-number-bg);
       &:hover {
-        background-color: lighten($marked, 10%);
+        background-color: var(--marked-number-bg-hover);
       }
     }
   }

@@ -1,7 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
+:root {  
+  --default-number-bg: #696969;
+  --default-number-bg-hover: #838383;
+  --default-number-color: #f0f8ff;
+  --marked-number-bg: #c22222;
+  --marked-number-bg-hover: #dd3a3a;
+  --bg-color: #ececec;
+  --color: #363636;
+  --secondary: #0080C9;
+  --primary: #21BE12;
+  --btn-color: #ffffff;
+}
+
 body {
   background-color: #ffe4c4;
+  background-color: #3c3c3c;
   font-family: 'Roboto';
   margin: 0;
+  color: var(--color);
 }

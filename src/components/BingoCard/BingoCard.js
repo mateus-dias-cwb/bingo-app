@@ -4,17 +4,37 @@ export default class BingoCard extends HTMLElement {
   constructor() {
     super()
 
-    const storedCardNumbers = JSON.parse(window.localStorage.getItem("bingoNumbers"))
-    this.cardNumbers = storedCardNumbers ? storedCardNumbers : []
+    this.playerCard = {
+      size: 25,
+      maxValue: 100
+    }
+    this.playerNumbers = []
+    this.generatePlayerNumbers()
     const card = this.createBingoCard()
-    this.bingoCardSetUp(card, 25)
+    this.bingoCardSetUp(card)
+    
+    this.attachShadow({mode: "open"})
+    this.attachStyle()
+    this.shadowRoot.append(card)
+  }
 
+  attachStyle() {
     const style = document.createElement("style")
     style.innerHTML = styles
-
-    this.attachShadow({mode: "open"})
     this.shadowRoot.append(style)
-    this.shadowRoot.append(card)
+  }
+
+  generatePlayerNumbers() {
+    const storedData = JSON.parse(window.localStorage.getItem("playerNumbers"))
+    if (storedData) {
+      this.playerNumbers = storedData
+    }
+    else {
+      for(let i = 0; i < this.playerCard.size; i++) {
+        this.playerNumbers.push({value:this.generateNewNumber(),marked:false})
+      }
+      // window.localStorage.setItem("playerNumbers", JSON.stringify(this.playerNumbers))
+    }
   }
 
   createBingoCard() {
@@ -23,54 +43,55 @@ export default class BingoCard extends HTMLElement {
     return card
   }
 
-  createBingoNumber(num=null, i=null) {
+  createBingoNumber(i) {
     const number = document.createElement("div")
     number.classList.add("bingo-number")
     number.setAttribute("id", i)
-    if (num) {
-      number.innerHTML = ('0' + num.number).slice(-2)
-      if (num.marked) {
-        number.classList.add("marked")
-      } else {
-        number.classList.remove("marked")
-      }
+    number.innerHTML = ('0' + this.playerNumbers[i].value).slice(-2)
+    if (this.playerNumbers[i].marked) {
+      number.classList.add("marked")
     } else {
-      number.innerHTML = ('0' + this.generateNewNumber()).slice(-2)
+      number.classList.remove("marked")
     }
     number.addEventListener("click", evt => {
-      number.classList.toggle("marked")
-      const bingoNumbers = JSON.parse(window.localStorage.getItem("bingoNumbers"))
-      const num = bingoNumbers[number.getAttribute("id")]
-      num.marked = !num.marked
-      window.localStorage.setItem("bingoNumbers", JSON.stringify(bingoNumbers))
+      this.toggleMarked(number)
     })
     return number
   }
 
-  generateNewNumber(min = 0, max = 101) {
-    let newNumber = Math.floor(Math.random() * (max - min) + min)
-    let newNumberIndex = this.cardNumbers.findIndex(item => {
-      if (item.number === newNumber)
-        return true
-    })
-    while (newNumberIndex != -1) {
-      newNumber = Math.floor(Math.random() * (max - min) + min)
-      newNumberIndex = this.cardNumbers.findIndex(item => {
-        if (item.number === newNumber)
-          return true
-      })
-    }
-    this.cardNumbers.push({number:newNumber,marked:false})
+  toggleMarked(number) {
+    number.classList.toggle("marked")
+    const playerNumbers = JSON.parse(window.localStorage.getItem("playerNumbers"))
+    const num = playerNumbers[number.getAttribute("id")]
+    num.marked = !num.marked
+    window.localStorage.setItem("playerNumbers", JSON.stringify(playerNumbers))
+  }
+
+  generateNewNumber() {
+    let newNumber = this.generateRandomNumber()
+    do {
+      newNumber = this.generateRandomNumber()
+    } while  (this.validateNewNumber(newNumber))
     return newNumber
   }
 
-  bingoCardSetUp(card, cardSize) {
-    for(let i = 0; i < cardSize; i++) {
-      const number = this.createBingoNumber(this.cardNumbers[i], i)
+  generateRandomNumber() {
+    return Math.floor(Math.random() * (this.playerCard.maxValue))
+  }
+
+  validateNewNumber(number) {
+   const isValid = this.playerNumbers.findIndex(item => {
+      return item.value == number ? true : false
+    }) === -1 ? true : false
+    console.log(number + " isValid: " + isValid)
+    return !isValid
+  }
+
+  bingoCardSetUp(card) {
+    for(let i = 0; i < this.playerCard.size; i++) {
+      const number = this.createBingoNumber(i)
       card.append(number)
     }
-    
-    window.localStorage.setItem("bingoNumbers", JSON.stringify(this.cardNumbers))
   }
 }
 customElements.define("bingo-card", BingoCard)

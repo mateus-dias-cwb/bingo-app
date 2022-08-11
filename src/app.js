@@ -1,6 +1,9 @@
 import "./components/BingoCard/BingoCard"
+// import "./components/Raffler/Raffler"
 import "./app.scss"
 
 const bodyTag = document.querySelector("body")
 const card = document.createElement("bingo-card")
-bodyTag.append(card)
+const raffler = document.createElement('bingo-raffler')
+
+bodyTag.append(card, raffler)
