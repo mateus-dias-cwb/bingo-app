@@ -33,7 +33,7 @@ export default class BingoCard extends HTMLElement {
       for(let i = 0; i < this.playerCard.size; i++) {
         this.playerNumbers.push({value:this.generateNewNumber(),marked:false})
       }
-      // window.localStorage.setItem("playerNumbers", JSON.stringify(this.playerNumbers))
+      window.localStorage.setItem("playerNumbers", JSON.stringify(this.playerNumbers))
     }
   }
 
@@ -80,10 +80,9 @@ export default class BingoCard extends HTMLElement {
   }
 
   validateNewNumber(number) {
-   const isValid = this.playerNumbers.findIndex(item => {
+    const isValid = this.playerNumbers.findIndex(item => {
       return item.value == number ? true : false
     }) === -1 ? true : false
-    console.log(number + " isValid: " + isValid)
     return !isValid
   }
 

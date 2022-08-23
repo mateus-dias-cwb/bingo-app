@@ -7,7 +7,7 @@
   --marked-number-bg: #c22222;
   --marked-number-bg-hover: #dd3a3a;
   --bg-color: #ececec;
-  --color: #363636;
+  --display-color: #363636;
   --secondary: #0080C9;
   --primary: #21BE12;
   --btn-color: #ffffff;
@@ -16,7 +16,12 @@
 body {
   background-color: #ffe4c4;
   background-color: #3c3c3c;
+  color: #ececec;
   font-family: 'Roboto';
   margin: 0;
-  color: var(--color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
 }
