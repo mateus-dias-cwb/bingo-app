@@ -1,97 +1,108 @@
-import styles from "./bingo-card.styles.scss"
+import styles from './bingo-card.styles.scss'
+import { formatNumber, generateNewNumber } from '../../numberGenerator'
+import { getNumbers, setNumbers } from '../../numberStorage'
 
 export default class BingoCard extends HTMLElement {
   constructor() {
     super()
 
-    this.playerCard = {
-      size: 25,
-      maxValue: 100
-    }
+    this.cardSize = 25
+    this.cardMax = 100
+
     this.playerNumbers = []
+    
+    this.attachShadow({mode: 'open'})
+    this.attachStyle()
+    this.init()
+  }
+
+  static get observedAttributes() {
+    return ['data-size', 'data-max'];
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue != newValue) {
+      switch (name) {
+        case 'data-size':
+          this.cardSize = newValue
+          break;
+        case 'data-max':
+          this.cardMax = newValue
+          break;    
+        default:
+          break;
+      }
+    }
+  }
+
+  init() {
     this.generatePlayerNumbers()
     const card = this.createBingoCard()
-    this.bingoCardSetUp(card)
-    
-    this.attachShadow({mode: "open"})
-    this.attachStyle()
     this.shadowRoot.append(card)
   }
 
-  attachStyle() {
-    const style = document.createElement("style")
-    style.innerHTML = styles
-    this.shadowRoot.append(style)
-  }
-
   generatePlayerNumbers() {
-    const storedData = JSON.parse(window.localStorage.getItem("playerNumbers"))
+    const storedData = getNumbers('playerNumbers')
     if (storedData) {
       this.playerNumbers = storedData
     }
     else {
-      for(let i = 0; i < this.playerCard.size; i++) {
-        this.playerNumbers.push({value:this.generateNewNumber(),marked:false})
+      for(let i = 0; i < this.cardSize; i++) {
+        this.playerNumbers.push({
+          value:generateNewNumber(
+            this.cardMax,
+            this.playerNumbers
+          ),
+          marked:false
+        })
       }
-      window.localStorage.setItem("playerNumbers", JSON.stringify(this.playerNumbers))
+      setNumbers('playerNumbers', this.playerNumbers)
     }
   }
 
   createBingoCard() {
-    const card = document.createElement("div")
-    card.classList.add("bingo-card")
+    const card = document.createElement('div')
+    card.classList.add('bingo-card')
+    this.bingoCardSetUp(card)
     return card
   }
 
-  createBingoNumber(i) {
-    const number = document.createElement("div")
-    number.classList.add("bingo-number")
-    number.setAttribute("id", i)
-    number.innerHTML = ('0' + this.playerNumbers[i].value).slice(-2)
-    if (this.playerNumbers[i].marked) {
-      number.classList.add("marked")
-    } else {
-      number.classList.remove("marked")
+  bingoCardSetUp(card) {
+    for(let i = 0; i < this.cardSize; i++) {
+      const numberTag = this.createBingoNumber(i)
+      card.append(numberTag)
     }
-    number.addEventListener("click", evt => {
+  }
+
+  createBingoNumber(num) {
+    const number = document.createElement('div')
+    number.classList.add('bingo-number')
+    number.setAttribute('id', num)
+    number.innerHTML = formatNumber(this.playerNumbers[num].value)
+    if (this.playerNumbers[num].marked) {
+      number.classList.add('marked')
+    } else {
+      number.classList.remove('marked')
+    }
+    number.addEventListener('click', evt => {
       this.toggleMarked(number)
     })
     return number
   }
 
   toggleMarked(number) {
-    number.classList.toggle("marked")
-    const playerNumbers = JSON.parse(window.localStorage.getItem("playerNumbers"))
-    const num = playerNumbers[number.getAttribute("id")]
+    number.classList.toggle('marked')
+    const playerNumbers = getNumbers('playerNumbers')
+    const num = playerNumbers[number.getAttribute('id')]
     num.marked = !num.marked
-    window.localStorage.setItem("playerNumbers", JSON.stringify(playerNumbers))
+    setNumbers('playerNumbers', playerNumbers)
   }
 
-  generateNewNumber() {
-    let newNumber = this.generateRandomNumber()
-    do {
-      newNumber = this.generateRandomNumber()
-    } while  (this.validateNewNumber(newNumber))
-    return newNumber
-  }
-
-  generateRandomNumber() {
-    return Math.floor(Math.random() * (this.playerCard.maxValue))
-  }
-
-  validateNewNumber(number) {
-    const isValid = this.playerNumbers.findIndex(item => {
-      return item.value == number ? true : false
-    }) === -1 ? true : false
-    return !isValid
-  }
-
-  bingoCardSetUp(card) {
-    for(let i = 0; i < this.playerCard.size; i++) {
-      const number = this.createBingoNumber(i)
-      card.append(number)
-    }
+  attachStyle() {
+    const style = document.createElement('style')
+    style.innerHTML = styles
+    this.shadowRoot.append(style)
   }
 }
-customElements.define("bingo-card", BingoCard)
+customElements.define('bingo-card', BingoCard)
 
