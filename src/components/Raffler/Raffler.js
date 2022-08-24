@@ -1,6 +1,6 @@
 import styles from './raffler.styles.scss'
-import { generateNewNumber, formatNumber } from '../../numberGenerator'
-import { setNumbers, getNumbers } from '../../numberStorage'
+import { generateNewNumber, formatNumber } from '../../controllers/numberGenerator'
+import { setNumbers, getNumbers } from '../../controllers/numberStorage'
 
 export default class Raffler extends HTMLElement {
   constructor() {

@@ -1,5 +1,5 @@
 import styles from './resetter.styles.scss'
-import { removeNumbers } from '../../numberStorage'
+import { removeNumbers } from '../../controllers/numberStorage'
 
 export default class Resetter extends HTMLElement {
   constructor() {
@@ -27,4 +27,4 @@ export default class Resetter extends HTMLElement {
     this.shadowRoot.append(resetter)
   }
 }
-customElements.define('game-resetter', Resetter)
+customElements.define('bingo-resetter', Resetter)

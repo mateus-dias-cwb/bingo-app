@@ -1,6 +1,6 @@
 import styles from './bingo-card.styles.scss'
-import { formatNumber, generateNewNumber } from '../../numberGenerator'
-import { getNumbers, setNumbers } from '../../numberStorage'
+import { formatNumber, generateNewNumber } from '../../controllers/numberGenerator'
+import { getNumbers, setNumbers } from '../../controllers/numberStorage'
 
 export default class BingoCard extends HTMLElement {
   constructor() {

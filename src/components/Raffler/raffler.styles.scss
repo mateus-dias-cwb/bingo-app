@@ -10,8 +10,8 @@ section.raffler {
     width: 100px;
     height: 100px;
     border-radius: 5px;
-    color: var(--display-color);
-    background-color: var(--bg-color);
+    color: var(--dark);
+    background-color: var(--light-grayish);
     font-size: 3.75rem;
     display: flex;
     justify-content: center;
@@ -19,7 +19,7 @@ section.raffler {
   }
   button.raffle-button {
     background-color: var(--primary);
-    color: var(--btn-color);
+    color: var(--white);
     height: 40px;
     width: 105px;
     border: none;
@@ -38,9 +38,12 @@ section.numbers-table {
   margin: 0 auto;
   justify-content: center;
   align-items: center;
+  background-color: var(--light-grayish);
+  padding: 10px 5px;
+  border-radius: 10px;
   .bingo-number {
-    background-color: var(--default-number-bg);
-    color: var(--default-number-color);
+    background-color: var(--gray-dark);
+    color: var(--light);
     font-size: 1.3rem;
     border-radius: 50%;
     display: flex;
@@ -52,7 +55,7 @@ section.numbers-table {
     transition: ease .3s;
     &.marked {
       animation: marked 1s;
-      background-color: var(--marked-number-bg);
+      background-color: var(--red-vivid);
     }
   }
 }
