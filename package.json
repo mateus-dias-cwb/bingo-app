@@ -19,7 +19,10 @@
     "url": "https://github.com/mateus-dias-cwb/bingo-app/issues"
   },
   "homepage": "https://github.com/mateus-dias-cwb/bingo-app#readme",
-  "dependencies": {},
+  "dependencies": {
+    "firebase": "^9.10.0",
+    "intl-tel-input": "^17.0.19"
+  },
   "devDependencies": {
     "css-loader": "^6.7.1",
     "html-loader": "^4.1.0",

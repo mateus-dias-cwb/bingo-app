@@ -1,8 +1,9 @@
+import './app.scss'
+import './components/BackToMenu/BackToMenu'
 import './components/BingoCard/BingoCard'
+import './components/GameMenu/GameMenu'
 import './components/Raffler/Raffler'
 import './components/Resetter/Resetter'
-import './components/GameMenu/GameMenu'
-import './components/BackToMenu/BackToMenu'
 import { navigateTo } from './router'
 import './app.scss'
 

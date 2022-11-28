@@ -36,7 +36,7 @@ module.exports = {
     ],
   },
   devServer: {
-    port: 8080,
+    port: 3300,
     client: {
       overlay: {
         errors: true,
@@ -44,5 +44,6 @@ module.exports = {
       },
     },
   },
+  devtool: 'eval-cheap-source-map',
   plugins: [new HtmlWebpackPlugin()]
 }

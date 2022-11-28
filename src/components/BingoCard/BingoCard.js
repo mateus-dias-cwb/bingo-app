@@ -1,6 +1,6 @@
 import styles from './bingo-card.styles.scss'
-import { formatNumber, generateNewNumber } from '../../controllers/numberGenerator'
-import { getNumbers, setNumbers } from '../../controllers/numberStorage'
+import numbers from '../../controllers/numbers'
+import storage from '../../controllers/storage'
 
 export default class BingoCard extends HTMLElement {
   constructor() {
@@ -10,8 +10,8 @@ export default class BingoCard extends HTMLElement {
     this.cardMax = 100
 
     this.playerNumbers = []
-    
-    this.attachShadow({mode: 'open'})
+
+    this.attachShadow({ mode: 'open' })
     this.attachStyle()
     this.init()
   }
@@ -28,7 +28,7 @@ export default class BingoCard extends HTMLElement {
           break;
         case 'data-max':
           this.cardMax = newValue
-          break;    
+          break;
         default:
           break;
       }
@@ -42,18 +42,18 @@ export default class BingoCard extends HTMLElement {
   }
 
   generatePlayerNumbers() {
-    const storedData = getNumbers('playerNumbers')
+    const storedData = storage.getNumbers('playerNumbers')
     if (storedData) {
       this.playerNumbers = storedData
     }
     else {
-      for(let i = 0; i < this.cardSize; i++) {
+      for (let i = 0; i < this.cardSize; i++) {
         this.playerNumbers.push({
-          value:generateNewNumber(
+          value: generateNewNumber(
             this.cardMax,
             this.playerNumbers
           ),
-          marked:false
+          marked: false
         })
       }
       setNumbers('playerNumbers', this.playerNumbers)
@@ -68,7 +68,7 @@ export default class BingoCard extends HTMLElement {
   }
 
   bingoCardSetUp(card) {
-    for(let i = 0; i < this.cardSize; i++) {
+    for (let i = 0; i < this.cardSize; i++) {
       const numberTag = this.createBingoNumber(i)
       card.append(numberTag)
     }

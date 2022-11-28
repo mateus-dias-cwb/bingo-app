@@ -1,11 +1,11 @@
 import styles from './resetter.styles.scss'
-import { removeNumbers } from '../../controllers/numberStorage'
+import storage from '../../controllers/storage'
 
 export default class Resetter extends HTMLElement {
   constructor() {
     super()
 
-    this.attachShadow({mode: 'open'})
+    this.attachShadow({ mode: 'open' })
     this.attachStyle()
     this.createResetter()
   }
@@ -21,8 +21,8 @@ export default class Resetter extends HTMLElement {
     resetter.classList.add('resetter-btn')
     resetter.innerHTML = 'Reset'
     resetter.addEventListener('click', evt => {
-      removeNumbers('hostNumbers')
-      removeNumbers('playerNumbers')
+      storage.removeNumbers('hostNumbers')
+      storage.removeNumbers('playerNumbers')
     })
     this.shadowRoot.append(resetter)
   }

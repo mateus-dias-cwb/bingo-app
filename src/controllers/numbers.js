@@ -2,7 +2,7 @@ export function generateNewNumber(max, array) {
   let newNumber = generateRandomNumber(max)
   do {
     newNumber = generateRandomNumber(max)
-  } while  (!validateNewNumber(newNumber, array))
+  } while (!validateNewNumber(newNumber, array))
   return newNumber
 }
 
@@ -11,10 +11,10 @@ function generateRandomNumber(max) {
 }
 
 function validateNewNumber(number, array) {
-  const isValid = array.findIndex(item => {
-    return item.value == number && item.marked ? true : false
+  return array.findIndex(item => {
+    const validation = (item.value == number) && item.marked ? true : false
+    return validation
   }) === -1 ? true : false
-  return isValid
 }
 
 export function formatNumber(num) {
