@@ -1,13 +1,13 @@
 import styles from './raffler.styles.scss'
-import numbers from '../../controllers/numbers'
-import storage from '../../controllers/storage'
+import { formatNumber, generateNewNumber } from '../../controllers/numbers'
+import { getNumbers, setNumbers } from '../../controllers/storage'
 
 export default class Raffler extends HTMLElement {
   constructor() {
     super()
 
     this.numbersTotal = 100
-    const storedHostNumbers = storage.getNumbers('hostNumbers')
+    const storedHostNumbers = getNumbers('hostNumbers')
     this.hostNumbers = storedHostNumbers ? storedHostNumbers : this.generateHostNumbers()
 
     this.numbersTable = this.createNumbersTable()
@@ -57,7 +57,7 @@ export default class Raffler extends HTMLElement {
       const number = document.createElement('div')
       number.classList.add('bingo-number')
       number.setAttribute('id', 'id' + item.value)
-      number.innerHTML = numbers.formatNumber(item.value)
+      number.innerHTML = formatNumber(item.value)
       if (item.marked) number.classList.add('marked')
       numbersTable.append(number)
     });
@@ -70,21 +70,21 @@ export default class Raffler extends HTMLElement {
     for (let i = 1; i < this.numbersTotal + 1; i++) {
       newNumberArray.push({ value: i, marked: false })
     }
-    storage.setNumbers('hostNumbers', newNumberArray)
+    setNumbers('hostNumbers', newNumberArray)
     return newNumberArray
   }
 
   raffleNumber() {
-    const number = numbers.generateNewNumber(this.numbersTotal, this.hostNumbers)
+    const number = generateNewNumber(this.numbersTotal, this.hostNumbers)
     this.markBingoNumber(number)
-    this.numberDisplay.innerHTML = numbers.formatNumber(number)
+    this.numberDisplay.innerHTML = formatNumber(number)
   }
 
   markBingoNumber(value) {
     const number = this.numbersTable.querySelector('#id' + value)
     number.classList.add('marked')
     this.hostNumbers[value - 1].marked = true
-    storage.setNumbers('hostNumbers', this.hostNumbers)
+    setNumbers('hostNumbers', this.hostNumbers)
   }
 
   attachStyle() {
