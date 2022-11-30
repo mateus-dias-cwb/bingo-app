@@ -1,6 +1,6 @@
 import styles from './bingo-card.styles.scss'
-import numbers from '../../controllers/numbers'
-import storage from '../../controllers/storage'
+import { generateNewNumber, formatNumber } from '../../controllers/numbers'
+import { getNumbers, setNumbers } from '../../controllers/storage'
 
 export default class BingoCard extends HTMLElement {
   constructor() {
@@ -42,7 +42,7 @@ export default class BingoCard extends HTMLElement {
   }
 
   generatePlayerNumbers() {
-    const storedData = storage.getNumbers('playerNumbers')
+    const storedData = getNumbers('playerNumbers')
     if (storedData) {
       this.playerNumbers = storedData
     }
